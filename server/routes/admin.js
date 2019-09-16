@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var Category = require('../models/category');
 var Product = require('../models/product')
+var mongoose = require('mongoose')
 router.get('/add-category', function(req, res, next) {
   res.render('admin/add-category', { message: req.flash('success') });
 });
@@ -21,20 +22,20 @@ router.get('/add-product', function(req, res, next) {
   res.render('admin/add-product', { message: req.flash('success') });
 });
 
-router.post('/add-product', function(req, res, next) {
-  var product= new Product();
-  var category = new Category()
-  product.category = req.body.category
-  product.name = req.body.name;
-  product.price = req.body.price;
-  product.image= req.body.image;
+router.post('/add-product', function(req, res , next ) {
+  var product = new Product()
+ 
+    product.name = req.body.name,
+    product.category = req.body.category,
+    product.price = req.body.price,
 
-  product.save(function(err) {
-    if (err) return next(err);
-    req.flash('success', 'Successfully added a product');
-    return res.redirect('/add-product');
+    product.save(function(err) {
+      if (err) return next(err);
+      req.flash('success', 'Successfully added a product');
+      return res.redirect('/add-product');
+    });
   });
-});
 
 
 module.exports = router;
+
